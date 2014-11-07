@@ -1,0 +1,43 @@
+.divAddForm {
+	width: 500px;
+}
+
+#addForm {
+	display: none;
+}
+.addButton {
+	margin-top: 10px;
+}
+.hideIt {
+	display: none;
+}
+
+.item {
+	border: 1px solid #000;
+	position: relative;
+}
+
+.itemTitle {
+	width: 75%;
+	display: inline-block;
+}
+.smallMenu {
+	width: 20%;
+	//display: inline-block;
+	position: absolute;
+	top: 0;
+	right: 0;
+
+}
+.highlight {
+	width: 500px;
+	padding: 9px 9px;
+	margin-bottom: 14px;
+	background-color: #f7f7f9;
+	border: 1px solid #e1e1e8;
+	border-radius: 4px;
+}
+
+.desc {
+	display: none;	
+}
