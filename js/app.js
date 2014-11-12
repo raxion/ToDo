@@ -13,6 +13,18 @@ $(document).ready(function() {
         for(i = 0;i < data.length;i++) {
             if(data[i].id == id) {
                 data.splice(i,1);
+            }
+            localStorage["todos"] = JSON.stringify(data);
+        }
+    });
+
+    $("body").on('click', ".editToDo", function() {
+        var id = $(this).parent().parent().attr("id");
+        var data = JSON.parse(localStorage.getItem("todos"));
+
+        for(i = 0;i < data.length;i++) {
+            if(data[i].id == id) {
+                data.splice(i,1);
             } else {
 
             }
@@ -21,6 +33,8 @@ $(document).ready(function() {
     });
 
     $("#addToDo").on('click', function() {
+        $("#toDoTitle").val("");
+        $("#toDoText").val("");
         $("#addForm").slideToggle("fast");
     });
 
