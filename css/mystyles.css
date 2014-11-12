@@ -22,11 +22,9 @@
 	display: inline-block;
 }
 .smallMenu {
-	width: 20%;
-	//display: inline-block;
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: 10px;
+	right: 10px;
 
 }
 .highlight {
