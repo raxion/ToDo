@@ -65,7 +65,7 @@ function createItem(todo) {
         'class': "item highlight"
     }).append($("<div/>", {
         'class': "itemTitle",
-    }).append($("<h2/>", {
+    }).append($("<h3/>", {
         text: todo.title
     }))).append($("<div/>", {
         'class': "smallMenu",
