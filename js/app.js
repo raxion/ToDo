@@ -1,6 +1,5 @@
-var highestToDo = 0;
 $(document).ready(function() {
-    highestToDo = loadToDos(highestToDo);
+    loadToDos();
     $("body").on('click', ".item", function() {
         $(this).children(".desc").slideToggle("fast");
     });
@@ -8,28 +7,11 @@ $(document).ready(function() {
     $("body").on('click', ".removeToDo", function() {
         var id = $(this).parent().parent().attr("id");
         $(this).parent().parent().hide();
-        var data = JSON.parse(localStorage.getItem("todos"));
-
-        for(i = 0;i < data.length;i++) {
-            if(data[i].id == id) {
-                data.splice(i,1);
-            }
-            localStorage["todos"] = JSON.stringify(data);
-        }
+        removeToDoFromFiBa(id);
     });
 
     $("body").on('click', ".editToDo", function() {
         var id = $(this).parent().parent().attr("id");
-        var data = JSON.parse(localStorage.getItem("todos"));
-
-        for(i = 0;i < data.length;i++) {
-            if(data[i].id == id) {
-                data.splice(i,1);
-            } else {
-
-            }
-            localStorage["todos"] = JSON.stringify(data);
-        }
     });
 
     $("#addToDo").on('click', function() {
@@ -40,42 +22,42 @@ $(document).ready(function() {
 
     $("#btnAddToDo").on('click', function () {
         var todo = {
-            "id": ++highestToDo,
             "title": $("#toDoTitle").val(),
             "description": $("#toDoText").val()
         };
-        createItem(todo);
-        addToDoToLocalStorage(todo);
+        addToDoToFiBa(todo);
         $("#addForm").slideToggle("fast");
     });
 });
 
-function loadToDos(highestToDo) {
-    var todos = JSON.parse(localStorage.getItem("todos"));
-    if(todos != null) {
-        todos.forEach(function(key) {
-            if(key.id > highestToDo) {
-                highestToDo = key.id;
-            }
-            createItem(key);
-        });
-    }
-    return highestToDo;
+function loadToDos() {
+    var myFirebaseRef = new Firebase("https://raxtodo.firebaseio.com/todos");
+    myFirebaseRef.on("child_added", function(snapshot) {
+        var id = snapshot.key();
+        var todo = snapshot.val();
+        createItem(id, todo);
+    }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    });
 }
 
-function addToDoToLocalStorage(todo) {
-    var todos = localStorage.getItem("todos");
-    var obj = [];
-    if(todos) {
-        obj = JSON.parse(todos);  
-    }
-    obj.push(todo);
-    localStorage.setItem("todos",JSON.stringify(obj));   
+function addToDoToFiBa(todo) {
+    var myFirebaseRef = new Firebase("https://raxtodo.firebaseio.com/todos");
+    myFirebaseRef.push({
+        title: todo.title,
+        description: todo.description
+    });
 }
 
-function createItem(todo) {
+function removeToDoFromFiBa(id) {
+    var ref = new Firebase("https://raxtodo.firebaseio.com/todos/" + id);
+    ref.remove();
+    //ref.child(id).remove();
+}
+
+function createItem(id, todo) {
     $("#itemList").prepend($("<div/>", {
-        id: todo.id,
+        id: id,
         'class': "item highlight"
     }).append($("<div/>", {
         'class': "itemTitle",
